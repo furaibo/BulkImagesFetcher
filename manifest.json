@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "BulkImagesFetcher",
+  "version": "1.0",
+  "description": "Chromeで表示中のWebページ内にある画像を取得できるChrome拡張です。",  
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "http://api.example.com/",
+	"http://fc03.deviantart.net/"
+  ]
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+	<title>BulkImagesFetcher</title>
+	<link rel="stylesheet" href="css/popup.css" type="text/css">
+</head>
+
+<body>
+	<!-- タイトル&結果表示 -->
+	<h2>BulkImagesFetcher</h2>
+	<p id="num_of_images">画像が00枚見つかりました</p>
+	
+	<!-- サイズ指定 -->
+	<h3>＜サイズ指定＞</h3>
+	<table>
+		<tr>
+			<td width="25">縦 :</td>
+			<td>
+				<input type="text" id="vertical_lower" value="300">～
+				<input type="text" id="vertical_upper" value="">　px
+			</td>
+			<td>
+				<input type="checkbox" id="vertical_available" checked>
+			</td>
+		</tr>
+		<tr>
+			<td width="25">横 :</td>
+			<td>
+				<input type="text" id="horizontal_lower" value="300">～
+				<input type="text" id="horizontal_upper" value="">　px
+			</td>
+			<td>
+				<input type="checkbox" id="horizontal_available" checked>
+			</td>
+		</tr>
+	</table>
+	
+	<!-- ダウンロード候補画像一覧表示 -->
+	<h3>＜ダウンロード候補画像一覧＞</h3>
+	<iframe src="list.html" frameborder="0" id="imagelist"></iframe>
+	
+	<!-- ダウンロードボタン -->
+	<table>
+		<tr>
+			<td><input type="checkbox" value="adimages">広告画像もDLする</td>
+			<td><input type="checkbox" value="notice">DL終了時に音で通知する</td>
+		</tr>
+		<tr>
+			<td><p id="status">ダウンロード可能です</p></td>
+		</tr>
+		<tr>
+			<td><input type="submit" value="ダウンロード"><td>
+		</tr>
+	</table>
+	
+	<!-- JavaScript -->
+	<script src="js/display.js"></script>
+	<script src="js/download.js"></script>
+</body>
+
+</html>
