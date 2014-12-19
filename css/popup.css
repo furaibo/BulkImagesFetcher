@@ -1,9 +1,14 @@
 body {
-    margin: 12px;
-    background-color: #fff;
-    min-width: 200px;
-    overflow-x: hidden;
-    font-family: "Helvetica Neue",Helvetica,"Hiragino Kaku Gothic Pro","Lucida Grande",Verdana,Arial,Meiryo,"メイリオ",sans-serif;
+	margin: 12px;
+	background-color: #fff;
+	min-width: 200px;
+	overflow-x: hidden;
+	font-family: "Helvetica Neue",Helvetica,"Hiragino Kaku Gothic Pro","Lucida Grande",Verdana,Arial,Meiryo,"メイリオ",sans-serif;
+}
+
+p {
+	max-width: 260px;
+	word-wrap: break-word;
 }
 
 #vertical_lower, #vertical_upper {
