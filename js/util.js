@@ -63,7 +63,3 @@ function downloadImage(url, name) {
     a.dispatchEvent(new CustomEvent('click'));
 }
 
-
-//download(url, name);
-alert(getHtmlString("http://www.yahoo.co.jp"));
-
