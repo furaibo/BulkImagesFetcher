@@ -7,7 +7,7 @@ body {
 }
 
 p {
-	max-width: 260px;
+	max-width: 300px;
 	word-wrap: break-word;
 }
 
@@ -19,7 +19,24 @@ p {
 	width: 80px;
 }
 
-#imagelist {
+#candidates {
 	height: 200px;
-	width: 300px;
+	min-width: 300px;
+    overflow-y: scroll;
+}
+
+td.thumbnail_block {
+    vertical-align: middle;
+    text-align: center;
+    height: 90px;
+    width: 90px;
+    border: 1px solid #ccc;
+}
+
+img.thumbnail {
+    display: inline-block;
+    margin: 5px;
+    max-width: 80px;
+    max-height: 80px;
+    background-size: contain;
 }

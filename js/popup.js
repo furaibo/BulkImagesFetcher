@@ -8,8 +8,18 @@ $(function(){
     // 現在開いているWebページのURLを取得する
     chrome.tabs.getSelected(window.id, function(tab){
 
-        // ダウンロード処理前の準備
-        var prepareDownload = function() {
+        //
+        var imageUrls = [];
+
+
+        /*
+         * ポップアップ画面表示時に行う処理
+         */
+
+        // 画像ダウンロード処理前の準備
+        (function() {
+            var defer = $.Deferred();
+
             chrome.runtime.sendMessage({
                 msg: "prepare",
                 url: tab.url
@@ -17,11 +27,33 @@ $(function(){
             function(response) {
                 // ダウンロード可能な画像の枚数の確認を行う
                 $("#num_of_images").text("画像が" + response.numImages + "枚見つかりました");
+                defer.resolve(response.imageUrls);
             });
-        }
 
-        // 画像ダウンロード処理
-        var proceedDownload = function() {
+            return defer.promise();
+
+        })()
+
+        // ダウンロードする画像の候補の一覧を表示する
+        .then(function(imageUrls){
+            var defer = $.Deferred();
+            for (i=0; i<imageUrls.length; i++) {
+                if (i%3 == 0) {
+                    $("#candidates").append("<tr>");
+                } 
+                $("#candidates").append('<td class="thumbnail_block"><img class="thumbnail" src="' + imageUrls[i] + '"></td>');
+                if (i%3 == 2) {
+                    $("#candidates").append("</tr>");
+                }
+            }
+
+            return defer.promise();
+        })
+
+        // 残りのダウンロード予定画像の数を表示する
+        .done(function() {
+            var defer = $.Deferred();
+
             chrome.runtime.sendMessage({
                 msg: "proceed"
             },
@@ -33,17 +65,15 @@ $(function(){
                     $("#status").text("ダウンロード可能です");
                 }
             });
-        }
-       
-        // ダウンロード準備
-        prepareDownload();
+
+            return defer.promise();
+        })
 
         // URLを表示する
         $("#current_url").text("URL : " + tab.url);
 
         // ダウンロードボタンを押した際の処理
         $("#start_download").click(function(){
-            proceedDownload();
         });
 
     });

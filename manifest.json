@@ -6,6 +6,19 @@
     "browser_action": {
         "default_popup": "popup.html"
     },
+    "content_scripts": [
+        {
+            "matches": [
+                "http://*/",
+                "https://*/"
+            ],
+            "js": [
+                "js/jquery-2.1.3.min.js",
+                "js/util.js",
+                "js/popup.js"
+            ]
+        }
+    ],
     "background": {
         "scripts": [
             "js/jquery-2.1.3.min.js",
