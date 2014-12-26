@@ -9,46 +9,47 @@ $(function(){
      *  デフォルト値の設定
      */
     // 画像のサイズのデフォルト値を入れる
-    $("#vertical_lower").prop("value", 100);
-    //$("#vertical_upper").prop("value", 300);
-    $("#horizontal_lower").prop("value", 100);
-    //$("#horizontal_upper").prop("value", 300);
+    $("#height_lower").prop("value", 50);
+    $("#height_upper").prop("value", 1000);
+    $("#width_lower").prop("value", 50);
+    $("#width_upper").prop("value", 1000);
 
 
     /*
      *  イベント定義
      */
     // 画像の縦サイズの入力の有無の切り替え
-    $("#vertical_available").click(function(){
-        if ($("#vertical_available").is(":checked")) {
-            $("#vertical_lower").prop("disabled", false);
-            $("#vertical_upper").prop("disabled", false);
+    $("#height_available").click(function(){
+        if ($("#height_available").is(":checked")) {
+            $("#height_lower").prop("disabled", false);
+            $("#height_upper").prop("disabled", false);
         } else {
-            $("#vertical_lower").prop("disabled", true);
-            $("#vertical_upper").prop("disabled", true);
+            $("#height_lower").prop("disabled", true);
+            $("#height_upper").prop("disabled", true);
         }
     });
 
     // 画像の横サイズの入力の有無の切り替え
-    $("#horizontal_available").click(function(){
-        if ($("#horizontal_available").is(":checked")) {
-            $("#horizontal_lower").prop("disabled", false);
-            $("#horizontal_upper").prop("disabled", false);
+    $("#width_available").click(function(){
+        if ($("#width_available").is(":checked")) {
+            $("#width_lower").prop("disabled", false);
+            $("#width_upper").prop("disabled", false);
         } else {
-            $("#horizontal_lower").prop("disabled", true);
-            $("#horizontal_upper").prop("disabled", true);
+            $("#width_lower").prop("disabled", true);
+            $("#width_upper").prop("disabled", true);
         }
     });
 
-
-    /*
-     *  画像サイズ
-     */
-    //
-    // $("img #thumbnail").load(function(){
-    //     $("img #thumbnail").css("opacity","0.3");
-    // });
-    //
+    // DL候補画像のDLの切り替え
+    $(document).on("click", ".thumbnail", function(){
+        if ($(this).css("opacity") == 1.0) {
+            // フェードアウト
+            $(this).fadeTo(500, 0.2);
+        } else {
+            // フェードイン
+            $(this).fadeTo(500, 1.0);
+        }
+    });
 
 
     // DLが終了したら音を鳴らす
@@ -66,42 +67,16 @@ $(function(){
      *  関数定義
      */
 
-
     // 画像をプリロードする
     jQuery.preloadImages = function(){
         //var imageUrls = [];
         for(var i=0; i<arguments.length; i++){
             $("img", self).each(function(){
                 var img = new Image();
-
-                img.onload = function() {
-                    var imgWidth  = img.width,   // 画像の幅
-                        imgHeight = img.height;  // 画像の高さ
-                }
-
                 img.src = arguments[i];
             });
         }
     };
-
-    //
-    /*
-    $("img").one("load", function() {
-        var img = new Image();
-        img.onload = function() {
-            var imgWidth  = img.width,   // 画像の幅
-                imgHeight = img.height;  // 画像の高さ
-            $(this).prop("width",  imgWidth);
-            $(this).prop("height", imgHeight);
-        }
-        img.src = $("img").attr("src");
-        if ($(this).height() > 0) {
-            $(this).css("opacity", "0.2");
-        }
-    }).each(function() {
-        if(this.complete) $(this).load();
-    });
-    */
 
 
     /*
@@ -151,6 +126,7 @@ $(function(){
                 }
 
                 var tdTag = $("<td></td>").attr({
+                    id: i,
                     class: "thumbnail_block"
                 })
                 trTag.append(tdTag);
@@ -166,20 +142,31 @@ $(function(){
 
             // 指定サイズ未満の画像を半透明にする
             $("img").one("load", function(){
+
+                // 画像データ
                 var img = new Image();
                 img.src = $(this).attr("src");
 
-                var vertical_lower = $("#vertical_lower").prop("value");
-                var vertical_upper = $("#vertical_upper").prop("value");
-                var horizontal_lower = $("#horizontal_lower").prop("value");
-                var horizontal_upper = $("#horizontal_upper").prop("value");
+                // 画像サイズ
+                var height_lower = $("#height_lower").prop("value");
+                var height_upper = $("#height_upper").prop("value");
+                var width_lower = $("#width_lower").prop("value");
+                var width_upper = $("#width_upper").prop("value");
 
-                if (img.height < vertical_lower) {
-                    $(this).css("opacity", "0.2");
+                // 事前に設定した画像の高さ・幅で候補画像のフィルタリングを行う
+                if (height_lower != "" && img.height < height_lower) {
+                    $(this).css("opacity", 0.2);
                 }
-                if (img.width < horizontal_lower) {
-                    $(this).css("opacity", "0.2");
+                if (width_lower != "" && img.width < width_lower) {
+                    $(this).css("opacity", 0.2);
                 }
+                if (height_upper != "" && img.height > height_upper) {
+                    $(this).css("opacity", 0.2);
+                }
+                if (width_upper != "" && img.width > width_upper) {
+                    $(this).css("opacity", 0.2);
+                }
+
             }).each(function() {
                 if(this.complete) $(this).load();
             });

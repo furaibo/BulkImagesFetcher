@@ -16,17 +16,25 @@ $(function(){
                 // 画像URLを格納する
                 var imageSrc = [];
                 $(html).find("img").each(function(){
-                    var url = $(this).attr("src");
+                    var re = new RegExp("^//.*?/", "i");
+                    var src = $(this).attr("src");
+
+                    var url = src.replace(re, "/");
                     if (url.charAt(0) == "/") {
                         url = "http://" + host + url;
                     }
                     imageSrc.push(url);
                 });
 
+                // 重複するURLを取り除いた配列を作成する
+                var imageUrls = imageSrc.filter(function (x, i, self) {
+                    return self.indexOf(x) === i;
+                });
+
                 // popup側への応答
                 sendResponse({
-                    numImages: imageSrc.length,
-                    imageUrls: imageSrc
+                    numImages: imageUrls.length,
+                    imageUrls: imageUrls
                 });
 
             //

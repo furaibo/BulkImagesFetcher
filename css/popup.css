@@ -11,11 +11,11 @@ p {
 	word-wrap: break-word;
 }
 
-#vertical_lower, #vertical_upper {
+#height_lower, #height_upper {
 	width: 80px;
 }
 
-#horizontal_lower, #horizontal_upper {
+#width_lower, #width_upper {
 	width: 80px;
 }
 
