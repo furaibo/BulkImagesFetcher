@@ -9,9 +9,9 @@ $(function(){
      *  デフォルト値の設定
      */
     // 画像のサイズのデフォルト値を入れる
-    $("#height_lower").prop("value", 50);
+    $("#height_lower").prop("value", 100);
     $("#height_upper").prop("value", 1000);
-    $("#width_lower").prop("value", 50);
+    $("#width_lower").prop("value", 100);
     $("#width_upper").prop("value", 1000);
 
 
@@ -41,16 +41,40 @@ $(function(){
     });
 
     // DL候補画像のDLの切り替え
-    $(document).on("click", ".thumbnail", function(){
+    $(document).on("click", "img.thumbnail", function(imageUrls){
+
+        var src = $(this).prop("src");
+
         if ($(this).css("opacity") == 1.0) {
-            // フェードアウト
-            $(this).fadeTo(500, 0.2);
+            $(this).fadeTo(500, 0.2);  // フェードアウト
         } else {
-            // フェードイン
-            $(this).fadeTo(500, 1.0);
+            $(this).fadeTo(500, 1.0); // フェードイン
         }
     });
 
+    // ダウンロードボタンを押した際の処理
+    $("#start_download").click(function(){
+
+        // ダウンロード対象の画像URLを取得する
+        var imageUrls = [];
+        $("img.thumbnail").each(function(){
+            if ($(this).css("opacity") == 1.0) {
+                imageUrls.push($(this).prop("src"));
+            }
+        });
+
+        // backgroundへの処理要求
+        chrome.runtime.sendMessage({
+            msg: "download",
+            imageUrls: imageUrls
+        },
+        function(response) {
+            if (response.numImages > 0) {
+                $("#status").text("DL画像: " + response.numImages + "枚");
+            }
+        });
+
+    });
 
     // DLが終了したら音を鳴らす
     /*
@@ -145,7 +169,8 @@ $(function(){
 
                 // 画像データ
                 var img = new Image();
-                img.src = $(this).attr("src");
+                var src = $(this).attr("src");
+                img.src = src;
 
                 // 画像サイズ
                 var height_lower = $("#height_lower").prop("value");
@@ -157,13 +182,13 @@ $(function(){
                 if (height_lower != "" && img.height < height_lower) {
                     $(this).css("opacity", 0.2);
                 }
-                if (width_lower != "" && img.width < width_lower) {
+                else if (width_lower != "" && img.width < width_lower) {
                     $(this).css("opacity", 0.2);
                 }
-                if (height_upper != "" && img.height > height_upper) {
+                else if (height_upper != "" && img.height > height_upper) {
                     $(this).css("opacity", 0.2);
                 }
-                if (width_upper != "" && img.width > width_upper) {
+                else if (width_upper != "" && img.width > width_upper) {
                     $(this).css("opacity", 0.2);
                 }
 
@@ -171,54 +196,11 @@ $(function(){
                 if(this.complete) $(this).load();
             });
 
-
-            /*
-            // 画像のプリロードを行う
-            $.preloadImages(imageUrls);
-
-            // imgタグを追加する
-            var imageCount = 0;
-            for (i=0; i<imageUrls.length; i++) {
-                if (i%3 == 0) {
-                    $("#candidates").append("<tr>");
-                } 
-                $("#candidates").append('<td class="thumbnail_block"><img id="' + i +
-                    '" class="thumbnail" src="' + imageUrls[i] + '"></td>');
-                if (i%3 == 2) {
-                    $("#candidates").append("</tr>");
-                }
-            }
-            */
-
             return defer.promise();
         })
-        
-        // 残りのダウンロード予定画像の数を表示する
-        .done(function() {
-            var defer = $.Deferred();
-
-            chrome.runtime.sendMessage({
-                msg: "proceed"
-            },
-            function(response) {
-                // 残りのDL画像枚数を表示する
-                if (response.restImages > 0) {
-                    $("#status").text("残りDL画像" + response.restImages + "枚");
-                } else {
-                    $("#status").text("ダウンロード可能です");
-                }
-            });
-
-            return defer.promise();
-        })
-
 
         // URLを表示する
         $("#current_url").text("URL : " + tab.url);
-
-        // ダウンロードボタンを押した際の処理
-        $("#start_download").click(function(){
-        });
 
     });
 

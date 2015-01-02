@@ -50,11 +50,6 @@ var getHtmlObject = function(sourceUrl) {
     return htmlObject;
 }
 
-// 画像のURLをHTMLデータから取得する
-function getImageUrl(url) {
-
-}
-
 // Chromeクリックイベントの発火により画像をダウンロードする
 function downloadImage(url, name) {
     var a = document.createElement('a');
