@@ -6,7 +6,7 @@ body {
 	font-family: "Helvetica Neue",Helvetica,"Hiragino Kaku Gothic Pro","Lucida Grande",Verdana,Arial,Meiryo,"メイリオ",sans-serif;
 }
 
-p {
+#current_url{
 	max-width: 300px;
 	word-wrap: break-word;
 }
@@ -17,6 +17,10 @@ p {
 
 #width_lower, #width_upper {
 	width: 80px;
+}
+
+#size_error {
+   color: red;
 }
 
 #candidates {
