@@ -61,7 +61,10 @@ $(function(){
             // 画像のダウンロード処理
             } else if (request.msg == "download") {
 
+                // 正規表現
                 var reg_name = new RegExp(".+/(.*)");
+
+                // ダウンロード処理
                 for (var i=0; i<request.imageUrls.length; i++) {
                     var url = request.imageUrls[i];
                     if (url.match(reg_name)) {

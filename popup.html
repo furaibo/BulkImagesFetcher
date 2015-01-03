@@ -19,7 +19,7 @@
 		<form id="size">
 			<table>
 				<tr>
-					<td width="25">縦 :</td>
+					<td class="size_label"> 縦 :</td>
 					<td>
 						<input type="text" id="height_lower" value="">～
 						<input type="text" id="height_upper" value=""> px
@@ -29,7 +29,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td width="25">横 :</td>
+					<td class="size_label"> 横 :</td>
 					<td>
 						<input type="text" id="width_lower" value="">～
 						<input type="text" id="width_upper" value=""> px
@@ -50,9 +50,12 @@
 
 		<!-- ダウンロードボタン -->
 		<table>
+			<!--
 			<tr>
 				<td><input type="checkbox" id="notice">DL終了時に音で通知する</td>
 			</tr>
+			-->
+			<tr>
 				<td><p id="status">ダウンロード可能です</p></td>
 			</tr>
 			<tr>

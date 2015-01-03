@@ -25,6 +25,11 @@ p {
     overflow-y: scroll;
 }
 
+td.size_label {
+    text-align: center;
+    width: 30px;
+}
+
 td.thumbnail_block {
     vertical-align: middle;
     text-align: center;
