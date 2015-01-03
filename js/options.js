@@ -110,11 +110,9 @@ $(function(){
         // 画像の高さについてチェック
         if (height_lower < 0) {
             $(this).val(0);
-            $("#default_size_error").text("下限値に0以下の値は指定できません");
         }
         if (height_lower > height_upper) {
             $(this).val(height_upper);
-            $("#default_size_error").text("下限値に上限値を超える値は指定できません");
         }
 
         // 不正な文字を取り除く
@@ -131,11 +129,9 @@ $(function(){
         // 画像の高さについてチェック
         if (height_upper < 0) {
             $(this).val(0);
-            $("#default_size_error").text("上限値に0以下の値は指定できません");
         }
         if (height_lower > height_upper) {
             $(this).val(height_lower);
-            $("#default_size_error").text("上限値に下限値を下回る値は指定できません");
         }
 
         // 不正な文字を取り除く
@@ -152,11 +148,9 @@ $(function(){
         // 画像の幅についてチェック
         if (width_lower < 0) {
             $(this).val(0);
-            $("#default_size_error").text("下限値に0以下の値は指定できません");
         }
         if (width_lower > width_upper) {
             $(this).val(width_upper);
-            $("#default_size_error").text("下限値に上限値を超える値は指定できません");
         }
 
         // 不正な文字を取り除く
@@ -173,11 +167,9 @@ $(function(){
         // 画像の幅についてチェック
         if (width_upper < 0) {
             $(this).val(0);
-            $("#default_size_error").text("上限値に0以下の値は指定できません");
         }
         if (width_lower > width_upper) {
             $(this).val(width_lower);
-            $("#default_size_error").text("上限値に下限値を下回る値は指定できません");
         }
 
         // 不正な文字を取り除く
