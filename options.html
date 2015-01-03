@@ -1,13 +1,50 @@
 <!DOCTYPE html>
 <html>
-	<meta charset="utf-8">
-	<head>
-		<title>BulkImagesFetcher</title>
-		<link rel="stylesheet" href="css/popup.css" type="text/css">
-	</head>
+<meta charset="utf-8">
+<head>
+	<title>BulkImagesFetcher</title>
+	<link rel="stylesheet" href="css/options.css" type="text/css">
+</head>
 
-	<body>
-		<h2>BulkImagesFetcher</h2>
-	</body>
+<body>
+
+	<!-- タイトル表示 -->
+	<h2>＜BulkImagesFetcher・関連設定＞</h2>
+
+	<!-- サイズ指定 -->
+	<form id="size">
+		<p>＜デフォルトサイズ指定＞</p>
+		<table>
+			<tr>
+				<td class="default_size_label"> 縦 :</td>
+				<td>
+					<input type="text" id="default_height_lower" value="">～
+					<input type="text" id="default_height_upper" value=""> px
+				</td>
+			</tr>
+			<tr>
+				<td class="default_size_label"> 横 :</td>
+				<td>
+					<input type="text" id="default_width_lower" value="">～
+					<input type="text" id="default_width_upper" value=""> px
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="submit" id="default_change_size" value="変更">
+				</td>
+			</tr>	
+		</table>
+	</form>
+
+	<!-- サイズ指定時のエラーメッセージの表示 -->
+	<p id="default_size_error"></p>
+	
+	<!-- JavaScript -->
+	<script src="js/jquery-2.1.3.min.js"></script>
+	<script src="js/util.js"></script>
+	<script src="js/options.js"></script>
+
+</body>
 
 </html>

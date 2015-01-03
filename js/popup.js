@@ -1,5 +1,5 @@
 /*
- * popup.htmlのボタン動作、文面の変更に関する即時関数
+ * popup.htmlのボタン動作、文面の変更、画像ダウンロードに関する即時関数
  */
 
 // 即時関数
@@ -10,16 +10,49 @@ $(function(){
 
         // 画像URLを格納する配列
         var imageUrls = [];
-        
+
 
         /*
-         *  デフォルト値の設定
+         *  画像サイズフィルタでのデフォルト値の設定
          */
-        // 画像のサイズのデフォルト値を入れる
-        $("#height_lower").val(100);
-        $("#height_upper").val(1000);
-        $("#width_lower").val(100);
-        $("#width_upper").val(1000);
+
+        // localStorageのキー
+        var key = "BulkImagesFetcherConfig"; 
+
+        // localstorageに値が設定されている場合の処理
+        var str = localStorage.getItem(key)
+        if (str !== null) {
+            
+            // 保存されている内容を取得する
+            var obj = JSON.parse(str);
+
+            // テキストボックスへ値を入れる
+            if (obj["height_lower"] !== null) { $("#height_lower").val(obj["height_lower"]); }
+            if (obj["height_upper"] !== null) { $("#height_upper").val(obj["height_upper"]); }
+            if (obj["width_lower"]  !== null) { $("#width_lower").val(obj["width_lower"]); }
+            if (obj["width_lower"]  !== null) { $("#width_upper").val(obj["width_upper"]); }
+
+        // localstorageに値が設定されていない場合の処理
+        } else {
+
+            // 初期設定
+            var obj = {
+                "height_lower" : 100,
+                "height_upper" : 1000,
+                "width_lower"  : 100,
+                "width_upper"  : 1000
+            }
+
+            // localStorageへ設定を保存する
+            var local_str = JSON.stringify(obj);
+            localStorage.setItem(key, local_str);
+            
+            // 画像のサイズのデフォルト値を入れる
+            $("#height_lower").val(obj["height_lower"]);
+            $("#height_upper").val(obj["height_upper"]);
+            $("#width_lower").val(obj["width_lower"]);
+            $("#width_upper").val(obj["width_upper"]);
+        }
 
 
         /*
@@ -40,13 +73,21 @@ $(function(){
         jQuery.removeInvalidChar = function() {
 
             // 正規表現
-            var reg_zero = new RegExp("^0*([1-9]*[0-9]*)$");
+            var reg_zero = new RegExp("^0*([1-9]*[0-9]+)$");
 
             // 画像の幅・高さ
             var height_lower = $("#height_lower").val();
             var height_upper = $("#height_upper").val();
             var width_lower  = $("#width_lower").val();
             var width_upper  = $("#width_upper").val();
+
+            // 数値が指定されていない場合
+            if (height_lower == "") {
+                height_lower = "0";
+            }
+            if (width_lower == "") {
+                width_lower = "0";
+            }
 
             // 半角数字以外の文字を削除する
             height_lower = height_lower.match(/\d/g).join("");
@@ -55,16 +96,16 @@ $(function(){
             width_upper  = width_upper.match(/\d/g).join("");
 
             // 先頭の0を削除する
-            if (height_lower.match(reg_zero)) {
+            if (height_lower !== "" && height_lower.match(reg_zero)) {
                 height_lower = RegExp.$1;
             }
-            if (height_upper.match(reg_zero)) {
+            if (height_upper !== "" && height_upper.match(reg_zero)) {
                 height_upper = RegExp.$1;
             }
-            if (width_lower.match(reg_zero)) {
+            if (width_lower !== "" && width_lower.match(reg_zero)) {
                 width_lower = RegExp.$1;
             }
-            if (width_upper.match(reg_zero)) {
+            if (width_upper !== "" && width_upper.match(reg_zero)) {
                 width_upper = RegExp.$1;
             }
 
@@ -98,20 +139,20 @@ $(function(){
 
                 // 縦サイズでのフィルタリング
                 if ($("#height_available").is(":checked")) {
-                    if (height_lower != "" && img.height < height_lower) {
+                    if (height_lower !== "" && img.height < height_lower) {
                         $(this).css("opacity", 0.2);
                     }
-                    if (height_upper != "" && img.height > height_upper) {
+                    if (height_upper !== "" && img.height > height_upper) {
                         $(this).css("opacity", 0.2);
                     }
                 }
 
                 // 横サイズでのフィルタリング
                 if ($("#width_available").is(":checked")) {
-                    if (width_lower != "" && img.width < width_lower) {
+                    if (width_lower !== "" && img.width < width_lower) {
                         $(this).css("opacity", 0.2);
                     }
-                    if (width_upper != "" && img.width > width_upper) {
+                    if (width_upper !== "" && img.width > width_upper) {
                         $(this).css("opacity", 0.2);
                     }
                 }
@@ -253,6 +294,10 @@ $(function(){
             var height_upper = parseInt($("#height_upper").val());
 
             // 画像の高さについてチェック
+            if (height_upper < 0) {
+                $(this).val(0);
+                $("#size_error").text("上限値に0以下の値は指定できません");
+            }
             if (height_lower > height_upper) {
                 $(this).val(height_lower);
                 $("#size_error").text("上限値に下限値を下回る値は指定できません");
@@ -295,10 +340,17 @@ $(function(){
             var width_upper  = parseInt($("#width_upper").val());
 
             // 画像の幅についてチェック
+            if (width_upper < 0) {
+                $(this).val(0);
+                $("#size_error").text("上限値に0以下の値は指定できません");
+            }
             if (width_lower > width_upper) {
                 $(this).val(width_lower);
                 $("#size_error").text("上限値に下限値を下回る値は指定できません");
             }
+
+            // 不正な文字を取り除く
+            $.removeInvalidChar();
 
             // 事前に設定した画像の高さ・幅で候補画像のフィルタリングを行う
             $.filterCandidates();
@@ -333,6 +385,9 @@ $(function(){
                 $("#width_lower").prop("disabled", true);
                 $("#width_upper").prop("disabled", true);
             }
+
+            // 不正な文字を取り除く
+            $.removeInvalidChar();
 
             // 事前に設定した画像の高さ・幅で候補画像のフィルタリングを行う
             $.filterCandidates();

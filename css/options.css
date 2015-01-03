@@ -1,0 +1,16 @@
+#default_height_lower, #default_height_upper {
+	width: 80px;
+}
+
+#default_width_lower, #default_width_upper {
+	width: 80px;
+}
+
+#default_size_error {
+   color: red;
+}
+
+td.default_size_label {
+    text-align: center;
+    width: 30px;
+}
